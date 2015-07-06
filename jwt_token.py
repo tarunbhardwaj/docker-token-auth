@@ -26,14 +26,11 @@ class JWTToken():
             "nbf": int(time.time()),
             "iat": int(time.time()),
             "jti": str(uuid.uuid4()),
-            "access": [
+            "access": self.scope and [
                 {
                     "type": "repository",
-                    "name": "redis",
-                    "actions": [
-                        "push",
-                        "pull"
-                    ]
+                    "name": self.scope.image,
+                    "actions": self.scope.actions
                 }
             ]
         }

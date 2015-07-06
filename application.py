@@ -8,7 +8,7 @@ from werkzeug.exceptions import HTTPException, NotFound, abort
 from jwt_token import JWTToken
 from authorize import Auth
 
-Scope = namedtuple('Scope', ['type', 'image', 'action'])
+Scope = namedtuple('Scope', ['type', 'image', 'actions'])
 
 
 class DockerAuth(object):
@@ -19,7 +19,8 @@ class DockerAuth(object):
 
     def on_authorize(self, request):
         scope = \
-            request.args.get('scope') and request.args.get('scope').split(':')
+            request.args.get('scope') and Scope(request.args.get('scope').split(':'))
+        scope.actions = scope.actions.split(',')
         if not request.authorization:
             abort(401)
         if not Auth().check_access(
