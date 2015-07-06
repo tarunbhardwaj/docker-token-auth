@@ -18,17 +18,25 @@ class DockerAuth(object):
         ])
 
     def on_authorize(self, request):
-        scope = \
-            request.args.get('scope') and Scope(request.args.get('scope').split(':'))
-        scope.actions = scope.actions.split(',')
+        """
+        Returns a token if user is authorized for action
+        """
+        scope = None
+        if request.args.get('scope'):
+            type_, image, actions = request.args.get('scope').split(':')
+            actions = actions.split(',')
+            scope = Scope(type_, image, actions)
+
         if not request.authorization:
             abort(401)
+
         if not Auth().check_access(
             request.authorization.username,
             request.authorization.password,
             scope
         ):
             abort(401)
+
         token = JWTToken(
             request.args['account'], request.args['service'],
             scope
