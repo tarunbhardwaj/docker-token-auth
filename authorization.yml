@@ -1,0 +1,13 @@
+users:
+  devops: password
+admins:
+  - devops
+groups:
+  groupname:
+    - username
+images:
+  image_name:
+    user:
+      username:
+        - pull
+        - push
