@@ -10,10 +10,10 @@ class Auth():
             return False
         if username in config.get('admins', {}):
             return True  # every scope is allowed
-        if scope.actions in config.get('images', {}) \
-            .get(scope.image, {}) \
-            .get('user', {}) \
-            .get(username, []):
+        if scope and scope.actions in config.get('images', {}) \
+                .get(scope.image, {}) \
+                .get('user', {}) \
+                .get(username, []):
             return True
         return False
 
