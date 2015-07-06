@@ -6,6 +6,7 @@ config = yaml.load(open(os.environ['AUTH_CONFIG']).read())
 
 class Auth():
     def check_access(cls, username, password, scope):
+        "Check if username, password and scope combination is allowed"
         if not cls.authenticate_user(username, password):
             return False
         if username in config.get('admins', {}):
@@ -18,6 +19,7 @@ class Auth():
         return False
 
     def authenticate_user(cls, username, password):
+        "authenticate username and password from config file"
         if username not in config.get('users', {}):
             return False
         if config['users'][username] != password:
