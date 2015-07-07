@@ -14,10 +14,11 @@ class Auth():
             return True
         if username in config.get('admins', {}):
             return True  # every scope is allowed
-        if scope.actions in config.get('images', {}) \
-                .get(scope.image, {}) \
-                .get('user', {}) \
-                .get(username, []):
+        allowed_actions = config.get('images', {}) \
+            .get(scope.image, {}) \
+            .get('user', {}) \
+            .get(username, [])
+        if all(map(lambda x: x in allowed_actions, scope.actions)):
             return True
         return False
 
