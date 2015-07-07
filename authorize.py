@@ -9,9 +9,12 @@ class Auth():
         "Check if username, password and scope combination is allowed"
         if not cls.authenticate_user(username, password):
             return False
+        if not scope:
+            # Login call
+            return True
         if username in config.get('admins', {}):
             return True  # every scope is allowed
-        if scope and scope.actions in config.get('images', {}) \
+        if scope.actions in config.get('images', {}) \
                 .get(scope.image, {}) \
                 .get('user', {}) \
                 .get(username, []):
